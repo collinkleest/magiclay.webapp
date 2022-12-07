@@ -11,6 +11,7 @@ import { Route as RouteConstants } from './constants'
 
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import reportWebVitals from './reportWebVitals'
+import { VerificationCode } from './routes/VerificationCode'
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: RouteConstants.REGISTER,
     element: <Register />
+  },
+  {
+    path: RouteConstants.VERIFICATION_CODE,
+    element: <VerificationCode />
   }
 ])
 

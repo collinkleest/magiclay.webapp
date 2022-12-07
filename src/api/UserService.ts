@@ -1,9 +1,9 @@
-import { isLocalEnv, sleep } from '../common'
+import { isLocalEnv, sleep } from '../utils'
 import { UserDto } from '../dto'
 
 const API_ENDPOINT = 'http://localhost:3000'
 
-export async function registerUser(userData: UserDto) {
+export async function registerUser(userData: UserDto): Promise<Response> {
   if (isLocalEnv()) {
     await sleep(2000)
   }

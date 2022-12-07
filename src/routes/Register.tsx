@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { registerUser } from '../api/UserService'
 import { Route } from '../constants'
 import { Container } from '@mui/system'
@@ -13,8 +13,12 @@ import {
   Snackbar,
   Alert
 } from '@mui/material'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { RegistrationFormData, RegistrationSchema } from '../schemas'
+import './styles.css'
 
-export const Register = () => {
+export const Register = (): JSX.Element => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
@@ -23,40 +27,61 @@ export const Register = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [showPopup, setShowPopup] = useState(false)
   const [popupMessage, setPopupMessage] = useState('')
+  const navigate = useNavigate()
 
-  const handleSubmit = async () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm<RegistrationFormData>({
+    resolver: yupResolver(RegistrationSchema),
+    mode: 'onTouched'
+  })
+
+  const canRegister = (): boolean => {
+    return (
+      !!errors.firstName ||
+      firstName === '' ||
+      !!errors.lastName ||
+      lastName === '' ||
+      !!errors.email ||
+      email === '' ||
+      !!errors.password ||
+      password === '' ||
+      !!errors.confirmPassword ||
+      confirmPassword === ''
+    )
+  }
+
+  const registerHandler = async () => {
     setIsLoading(true)
-
-    if (confirmPassword === password) {
-      registerUser({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: password
+    registerUser({
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password
+    })
+      .then((response) => {
+        setIsLoading(false)
+        reset({})
+        if (response.status == 201) {
+          navigate(Route.VERIFICATION_CODE, { state: { email: email } })
+        } else {
+          setShowPopup(true)
+          response.json().then((res) => {
+            if (Array.isArray(res.message)) {
+              setPopupMessage(res.message.join(', '))
+            } else {
+              setPopupMessage(res.message)
+            }
+          })
+        }
       })
-        .then((response) => {
-          setIsLoading(false)
-          if (response.status == 201) {
-            console.log('success')
-          } else {
-            response.json().then(
-              (res) => {
-                setPopupMessage(res.message.join(', '))
-                setShowPopup(true)
-              }
-            )
-
-          }
-        })
-        .catch((err) => {
-          setIsLoading(false)
-          console.log(err)
-        })
-    } else {
-      setIsLoading(false)
-      setPopupMessage('Passwords do not match!')
-      setShowPopup(true)
-    }
+      .catch((err) => {
+        setIsLoading(false)
+        console.log(err)
+      })
   }
 
   return (
@@ -78,7 +103,9 @@ export const Register = () => {
           onClose={() => setShowPopup(false)}
           severity="error"
           sx={{ width: '100%' }}>
-          {popupMessage}
+          {popupMessage !== ''
+            ? popupMessage
+            : 'There is was an error please try again later'}
         </Alert>
       </Snackbar>
 
@@ -88,65 +115,79 @@ export const Register = () => {
 
       <TextField
         margin="normal"
+        variant="standard"
         required
         fullWidth
         id="firstname"
         label="First Name"
-        name="firstname"
+        {...register('firstName')}
         autoFocus
         onChange={(e) => setFirstName(e.target.value)}
       />
 
+      <p className="form-error-message">{errors.firstName?.message}</p>
+
       <TextField
         margin="normal"
+        variant="standard"
         required
         fullWidth
         id="lastname"
         label="Last Name"
-        name="lastname"
-        autoFocus
+        {...register('lastName')}
         onChange={(e) => setLastName(e.target.value)}
       />
 
+      <p className="form-error-message">{errors.lastName?.message}</p>
+
       <TextField
         margin="normal"
+        variant="standard"
         required
         fullWidth
         id="email"
         label="Email Address"
-        name="email"
-        autoFocus
+        {...register('email')}
         onChange={(e) => setEmail(e.target.value)}
       />
 
+      <p className="form-error-message">{errors.email?.message}</p>
+
       <TextField
         margin="normal"
+        variant="standard"
         required
         fullWidth
         id="password"
         label="Password"
-        name="password"
-        autoFocus
+        type="password"
+        {...register('password')}
         onChange={(e) => setPassword(e.target.value)}
       />
 
+      <p className="form-error-message">{errors.password?.message}</p>
+
       <TextField
         margin="normal"
+        variant="standard"
         required
         fullWidth
         id="confirmpassword"
         label="Confirm Password"
-        name="confirmpassword"
-        autoFocus
+        type="password"
+        {...register('confirmPassword')}
         onChange={(e) => setConfirmPassword(e.target.value)}
       />
+
+      <p className="form-error-message">{errors.confirmPassword?.message}</p>
 
       <Button
         type="submit"
         fullWidth
         variant="contained"
         sx={{ mt: 3, mb: 2 }}
-        onClick={handleSubmit}>
+        onClick={handleSubmit(registerHandler)}
+        disabled={canRegister()}>
         Register
       </Button>
 
