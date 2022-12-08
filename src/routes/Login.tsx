@@ -1,24 +1,79 @@
-import React from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { Button, Container, Grid, TextField } from '@mui/material'
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { Route } from '../constants'
+import { LoginFormData, LoginSchema } from '../schemas'
 
-export const Login = () => {
+export const Login = (): JSX.Element => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const registerHandler = () => {}
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm<LoginFormData>({
+    resolver: yupResolver(LoginSchema),
+    mode: 'onTouched'
+  })
+
   return (
-    <div className="App">
+    <Container maxWidth="sm">
       <h1> Login to your Magic Lay Account </h1>
-      <label>Email</label>
-      <input placeholder="email address"></input>
 
-      <label>Password</label>
-      <input placeholder="password"></input>
+      <TextField
+        margin="normal"
+        variant="standard"
+        required
+        fullWidth
+        id="email"
+        label="Email Address"
+        {...register('email')}
+        autoFocus
+        onChange={(e) => setEmail(e.target.value)}
+      />
 
-      <button>Log in</button>
-      <button>
-        <Link to={Route.FORGOT_PASSWORD}>Forgot Password</Link>
-      </button>
-      <button>
-        <Link to={Route.REGISTER}>Register</Link>
-      </button>
-    </div>
+      <p className="form-error-message">{errors.email?.message}</p>
+
+      <TextField
+        margin="normal"
+        variant="standard"
+        required
+        fullWidth
+        id="password"
+        label="Password"
+        type="password"
+        {...register('password')}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+
+      <p className="form-error-message">{errors.password?.message}</p>
+
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+        onClick={handleSubmit(registerHandler)}
+        disabled={
+          !!errors.email || email === '' || !!errors.password || password === ''
+        }>
+        Login
+      </Button>
+
+      <Grid container>
+        <Grid item xs>
+          <Link to={Route.FORGOT_PASSWORD}>Forgot password?</Link>
+        </Grid>
+        <Grid item>
+          <Link to={Route.REGISTER}> Dont have an account? Register</Link>
+        </Grid>
+      </Grid>
+    </Container>
   )
 }

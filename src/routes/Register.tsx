@@ -11,7 +11,8 @@ import {
   CircularProgress,
   Backdrop,
   Snackbar,
-  Alert
+  Alert,
+  Dialog
 } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -85,7 +86,7 @@ export const Register = (): JSX.Element => {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="sm">
       {isLoading && (
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
