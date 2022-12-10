@@ -1,13 +1,5 @@
 import * as yup from 'yup'
 
-export const VerificationSchema = yup.object({
-  code: yup.string().required('Code is required')
-})
-
-export type VerificationFormData = {
-  code: string
-}
-
 export const RegistrationSchema = yup.object({
   firstName: yup
     .string()

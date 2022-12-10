@@ -3,6 +3,8 @@ import { Button, Container, Grid, TextField } from '@mui/material'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import { login } from '../api'
+import HttpStatusCode from '../common/HttpStatusCode'
 import { Route } from '../constants'
 import { LoginFormData, LoginSchema } from '../schemas'
 
@@ -10,7 +12,21 @@ export const Login = (): JSX.Element => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const registerHandler = () => {}
+  const loginHandler = () => {
+    login({ email: email, password: password })
+      .then((res) => {
+        if (res.status === HttpStatusCode.FORBIDDEN) {
+          // do stuff
+        } else if (res.status === HttpStatusCode.UNAUTHORIZED) {
+          // do unauthorized stuff
+        } else if (res.status === HttpStatusCode.CREATED) {
+          // success!
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
 
   const {
     register,
@@ -59,7 +75,7 @@ export const Login = (): JSX.Element => {
         fullWidth
         variant="contained"
         sx={{ mt: 3, mb: 2 }}
-        onClick={handleSubmit(registerHandler)}
+        onClick={handleSubmit(loginHandler)}
         disabled={
           !!errors.email || email === '' || !!errors.password || password === ''
         }>

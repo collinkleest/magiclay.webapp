@@ -8,7 +8,7 @@ export const ForgotPassword = (): JSX.Element => {
   return (
     <Container component="main" maxWidth="sm">
       <Typography variant="h3"> Forgot your password? </Typography>
-      
+
       <TextField
         margin="normal"
         variant="standard"
@@ -20,7 +20,7 @@ export const ForgotPassword = (): JSX.Element => {
         autoFocus
         // onChange={(e) => setFirstName(e.target.value)}
       />
-      
+
       <Button
         type="submit"
         fullWidth
@@ -28,7 +28,7 @@ export const ForgotPassword = (): JSX.Element => {
         sx={{ mt: 3, mb: 2 }}
         // onClick={handleSubmit(registerHandler)}
         // disabled={canRegister()}
-        >
+      >
         Submit
       </Button>
       <Link to={Route.LOGIN}>Back to Login</Link>
