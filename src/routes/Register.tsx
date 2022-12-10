@@ -67,7 +67,9 @@ export const Register = (): JSX.Element => {
         setIsLoading(false)
         reset({})
         if (response.status == 201) {
-          navigate(Route.VERIFICATION_CODE, { state: { email: email } })
+          navigate(Route.VERIFICATION_CODE, {
+            state: { email: email }
+          })
         } else {
           setShowPopup(true)
           response.json().then((res) => {
@@ -89,7 +91,10 @@ export const Register = (): JSX.Element => {
     <Container component="main" maxWidth="sm">
       {isLoading && (
         <Backdrop
-          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          sx={{
+            color: '#fff',
+            zIndex: (theme) => theme.zIndex.drawer + 1
+          }}
           open={isLoading}>
           <CircularProgress color="inherit" />{' '}
         </Backdrop>
