@@ -18,7 +18,7 @@ export async function getUserDetails(token: string): Promise<Response> {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     }
   })
 }

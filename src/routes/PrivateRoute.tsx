@@ -1,11 +1,11 @@
-import { Backdrop, CircularProgress } from "@mui/material"
-import { Navigate } from "react-router-dom"
-import { Route } from "../constants"
-import { useAuthContext } from "../providers/AuthContext"
+import { Backdrop, CircularProgress } from '@mui/material'
+import { Navigate } from 'react-router-dom'
+import { Route } from '../constants'
+import { useAuthContext } from '../providers/AuthContext'
 
 export const PrivateRoute = ({ children }: any) => {
   const auth = useAuthContext()
-  
+
   if (!auth.authState.token || auth.authLoading) {
     return (
       <Backdrop
@@ -19,5 +19,5 @@ export const PrivateRoute = ({ children }: any) => {
     )
   }
 
-  return auth.authState.token ? children : <Navigate to={Route.LOGIN} />;
+  return auth.authState.token ? children : <Navigate to={Route.LOGIN} />
 }

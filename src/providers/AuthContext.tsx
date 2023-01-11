@@ -1,6 +1,6 @@
-import { createContext, useContext, useState } from "react";
-import { getUserDetails, ILoginResponse, refresh as callRefresh } from "../api";
-import { IUserDetails } from "../dto";
+import { createContext, useContext, useState } from 'react'
+import { getUserDetails, ILoginResponse, refresh as callRefresh } from '../api'
+import { IUserDetails } from '../dto'
 
 export interface IAuthState {
   _id: string
@@ -23,12 +23,12 @@ export interface IAuthContext {
 }
 
 export interface AuthContextProps {
-  children: React.ReactNode | React.ReactNode[];
+  children: React.ReactNode | React.ReactNode[]
 }
 
 export const AuthContext = createContext<IAuthContext>(
   undefined as unknown as IAuthContext
-);
+)
 
 export const AuthProvider = ({ children }: AuthContextProps) => {
   const [authLoading, setAuthLoading] = useState(true)
@@ -43,18 +43,18 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
     createdTimestamp: 0,
     lastLoginTimestamp: 0
   })
-  
+
   const login = (authState: IAuthState) => {
     setAuthState(authState)
   }
 
-  const refresh = async ()  => {
+  const refresh = async () => {
     setAuthLoading(true)
     try {
       const refreshRes = await callRefresh()
-      const refreshPayload = await refreshRes.json();
+      const refreshPayload = await refreshRes.json()
       if (refreshPayload && refreshPayload.token) {
-        const userDetailsRes = await getUserDetails(refreshPayload.token);
+        const userDetailsRes = await getUserDetails(refreshPayload.token)
         const userDetails: IUserDetails = await userDetailsRes.json()
         setAuthState({
           _id: userDetails.userId,
@@ -77,22 +77,24 @@ export const AuthProvider = ({ children }: AuthContextProps) => {
 
   const logout = () => {
     setAuthState({
-        _id: '',
-        token: '',
-        userName: '',
-        email: '',
-        firstName: '',
-        lastName: '',
-        groups: Array(),
-        createdTimestamp: 0,
-        lastLoginTimestamp: 0
-      }
-    )
+      _id: '',
+      token: '',
+      userName: '',
+      email: '',
+      firstName: '',
+      lastName: '',
+      groups: Array(),
+      createdTimestamp: 0,
+      lastLoginTimestamp: 0
+    })
   }
 
   return (
-    <AuthContext.Provider value={{authState, authLoading, login, refresh, logout} as IAuthContext}>
-      { children }
+    <AuthContext.Provider
+      value={
+        { authState, authLoading, login, refresh, logout } as IAuthContext
+      }>
+      {children}
     </AuthContext.Provider>
   )
 }

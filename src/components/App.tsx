@@ -1,12 +1,12 @@
-import React, { FC, useEffect } from "react"
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import React, { FC, useEffect } from 'react'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import { Route as RouteConstants } from '../constants'
-import { useAuthContext } from "../providers/AuthContext"
-import { ForgotPassword, Login, Register, Root } from "../routes"
-import { Home } from "../routes/Home"
-import { PrivateRoute } from "../routes/PrivateRoute"
-import { VerificationCode } from "../routes/VerificationCode"
+import { useAuthContext } from '../providers/AuthContext'
+import { ForgotPassword, Login, Register, Root } from '../routes'
+import { Home } from '../routes/Home'
+import { PrivateRoute } from '../routes/PrivateRoute'
+import { VerificationCode } from '../routes/VerificationCode'
 
 const router = createBrowserRouter([
   {
@@ -31,23 +31,24 @@ const router = createBrowserRouter([
   },
   {
     path: RouteConstants.HOME,
-    element: 
+    element: (
       <PrivateRoute>
         <Home />
       </PrivateRoute>
-  } 
+    )
+  }
 ])
 
 export const App = (): JSX.Element => {
   const auth = useAuthContext()
 
-  useEffect( () => {
+  useEffect(() => {
     if (!auth.authState || !auth.authState.token) {
       auth.refresh()
     }
   }, [])
 
-  return(
+  return (
     <>
       <RouterProvider router={router} />
     </>

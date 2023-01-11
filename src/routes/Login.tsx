@@ -1,5 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Backdrop, Button, CircularProgress, Container, Grid, TextField } from '@mui/material'
+import {
+  Backdrop,
+  Button,
+  CircularProgress,
+  Container,
+  Grid,
+  TextField
+} from '@mui/material'
 import React, { MouseEvent, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
@@ -30,7 +37,7 @@ export const Login = (): JSX.Element => {
           setIsLoading(false)
           // do unauthorized stuff
         } else if (res.status === HttpStatusCode.OK) {
-          const loginRes: ILoginResponse = await res.json() 
+          const loginRes: ILoginResponse = await res.json()
           getUserDetails(loginRes.token)
             .then(async (details) => {
               setIsLoading(false)

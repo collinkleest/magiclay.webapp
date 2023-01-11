@@ -9,17 +9,17 @@ import { useAuthContext } from '../providers/AuthContext'
 
 export const Home = (): JSX.Element => {
   const authContext = useAuthContext()
-  const [groups, setGroups] = useState(Array());
+  const [groups, setGroups] = useState(Array())
 
   useEffect(() => {
-    
     if (authContext.authState.groups && authContext.authState.token) {
-      getGroups(authContext.authState.token, authContext.authState.groups).then(async (res) => {
-         const resGroups = await res.json()
-         setGroups(resGroups)
-      })
+      getGroups(authContext.authState.token, authContext.authState.groups).then(
+        async (res) => {
+          const resGroups = await res.json()
+          setGroups(resGroups)
+        }
+      )
     }
-    
   }, [])
 
   return (
@@ -29,9 +29,7 @@ export const Home = (): JSX.Element => {
       <JoinGroup />
       <Typography variant="h6">Your Betting Groups:</Typography>
       {groups.map((g) => {
-        return (
-          <Group name={g.name} />
-        )
+        return <Group name={g.name} />
       })}
     </Container>
   )

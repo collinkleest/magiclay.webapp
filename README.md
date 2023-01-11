@@ -49,4 +49,4 @@ TODO:
 
 [ ] fix reset on registration page, reset is not happening after submision
 [ ] make password validation include an uppercase / lowercase
-[ ] fix set timeout before reroute after login 
+[ ] fix set timeout before reroute after login
