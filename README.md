@@ -47,5 +47,6 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 TODO:
 
-- fix reset on registration page, reset is not happening after submision
-- make password validation include an uppercase / lowercase
+[ ] fix reset on registration page, reset is not happening after submision
+[ ] make password validation include an uppercase / lowercase
+[ ] fix set timeout before reroute after login 

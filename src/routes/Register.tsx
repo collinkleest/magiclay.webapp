@@ -12,7 +12,6 @@ import {
   Backdrop,
   Snackbar,
   Alert,
-  Dialog
 } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -23,6 +22,7 @@ export const Register = (): JSX.Element => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
+  const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -51,7 +51,9 @@ export const Register = (): JSX.Element => {
       !!errors.password ||
       password === '' ||
       !!errors.confirmPassword ||
-      confirmPassword === ''
+      confirmPassword === '' ||
+      !!errors.userName ||
+      userName === ''
     )
   }
 
@@ -60,13 +62,14 @@ export const Register = (): JSX.Element => {
     registerUser({
       firstName: firstName,
       lastName: lastName,
+      userName: userName,
       email: email,
       password: password
     })
       .then((response) => {
         setIsLoading(false)
         reset({})
-        if (response.status == 201) {
+        if (response.status === 201) {
           navigate(Route.VERIFICATION_CODE, {
             state: { email: email }
           })
@@ -158,6 +161,19 @@ export const Register = (): JSX.Element => {
       />
 
       <p className="form-error-message">{errors.email?.message}</p>
+
+      <TextField
+        margin="normal"
+        variant="standard"
+        required
+        fullWidth
+        id="userName"
+        label="UserName"
+        {...register('userName')}
+        onChange={(e) => setUserName(e.target.value)}
+      />
+
+      <p className="form-error-message">{errors.userName?.message}</p>
 
       <TextField
         margin="normal"

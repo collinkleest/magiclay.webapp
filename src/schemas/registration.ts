@@ -11,6 +11,11 @@ export const RegistrationSchema = yup.object({
     .min(2, 'Last name must be longer than 2 characters')
     .max(35, 'Last name cannot be longer than 35 characters')
     .required('First name is a required field'),
+  userName: yup
+    .string()
+    .min(3, 'Username must be at least 3 characters')
+    .max(16, 'Username cannot be longer than 16 chatacters')
+    .required('Username is a required field'),
   email: yup
     .string()
     .email('Must be a valid email address')
@@ -31,6 +36,7 @@ export const RegistrationSchema = yup.object({
 export type RegistrationFormData = {
   firstName: string
   lastName: string
+  userName: string
   email: string
   password: string
   confirmPassword: string

@@ -1,15 +1,24 @@
 import { isLocalEnv, sleep } from '../utils'
-import { UserDto } from '../dto'
+import { IUserDetails, IUserDto } from '../dto'
+import { LOCAL_API_ENDPOINT, LOCAL_SLEEP_TIME } from '../constants'
 
-const API_ENDPOINT = 'http://localhost:3000'
-
-export async function registerUser(userData: UserDto): Promise<Response> {
+export async function registerUser(userData: IUserDto): Promise<Response> {
   if (isLocalEnv()) {
-    await sleep(2000)
+    await sleep(LOCAL_SLEEP_TIME)
   }
-  return await fetch(`${API_ENDPOINT}/user`, {
+  return await fetch(`${LOCAL_API_ENDPOINT}/user`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(userData)
+  })
+}
+
+export async function getUserDetails(token: string): Promise<Response> {
+  return await fetch(`${LOCAL_API_ENDPOINT}/user/details`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
   })
 }
